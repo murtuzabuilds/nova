@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nova · voice assistant with memory</title>
+<meta name="description" content="A context-aware voice assistant with memory and tool calling, running entirely in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fragment+Mono&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div class="brand"><span class="dot"></span>Nova</div>
+    <label class="toggle"><input type="checkbox" id="speak" checked> Speak replies</label>
+  </header>
+
+  <section class="stage">
+    <canvas id="orb" aria-hidden="true"></canvas>
+    <p class="state" id="state" aria-live="polite">Tap the mic or type below</p>
+  </section>
+
+  <section class="talk">
+    <ol class="log" id="log" aria-live="polite"></ol>
+    <div class="chips" id="chips">
+      <button type="button">My name is Alex</button>
+      <button type="button">I live in Madison</button>
+      <button type="button">What's the weather?</button>
+      <button type="button">And tomorrow?</button>
+      <button type="button">Remember that the demo is Friday</button>
+      <button type="button">What do you know about me?</button>
+    </div>
+    <form class="bar" id="bar">
+      <button type="button" class="mic" id="mic" aria-label="Talk to Nova"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12h-2Z"/></svg></button>
+      <input id="q" autocomplete="off" placeholder="Ask Nova anything…" aria-label="Message">
+      <button class="send" aria-label="Send">↵</button>
+    </form>
+  </section>
+
+  <aside class="side">
+    <h2>Trace</h2>
+    <ol class="trace" id="trace"><li class="empty">Every decision Nova makes shows up here: what it understood, what it pulled from memory, which tool it called.</li></ol>
+    <h2>Memory <button type="button" class="forget" id="forget">Forget all</button></h2>
+    <ul class="mem" id="mem"></ul>
+    <p class="fine">Memory lives only in this browser. Weather comes from Open-Meteo. Voice uses your browser's speech engine.</p>
+  </aside>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
