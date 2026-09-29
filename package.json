@@ -7,6 +7,6 @@
     "test": "node --test tests/*.test.js",
     "start": "npx --yes serve ."
   },
-  "author": "Murtuza Mohammed",
+  "author": "Murtuza",
   "license": "MIT"
 }

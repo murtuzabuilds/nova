@@ -1,4 +1,4 @@
-# Nova
+# Nova AI
 
 **A context-aware voice assistant with memory and tool calling.** It runs entirely in your browser: no server, no account, nothing leaves your device except the weather lookup.
 
@@ -14,10 +14,17 @@ Nova started as a UX case study about one question: *what makes a voice assistan
 | "What's the weather?" | Calls the weather tool, fills in *Madison* from memory | **Tool calling** with slots filled from memory |
 | "And tomorrow?" | Reuses the city from the last turn | **Short-term context** for natural follow-ups |
 | "Use celsius" | Changes how every later forecast is reported | Preferences that shape behavior |
+| "Translate 'Where is the station?' to Spanish" | Calls the translation tool (12 languages) | Tools beyond lookup |
 | "Remember that the demo is Friday" | Saves a note, lists it back on request | Personal knowledge on demand |
 | "Forget everything" | Wipes memory, instantly | **Control** sits with the user |
 
 The right-hand **Trace** panel shows every decision as it happens: what Nova understood, what it filled from memory or context, which tool it called and what came back. Explainability is part of the interface, not a debug mode.
+
+## The brand, built
+
+The app follows the Nova AI design system from the case study: SF Pro, Indigo `#403BA1`, Blue `#4F8BFF`, Teal `#00C7BE`, Purple `#A66DD4` and Graphite `#2C2C2C`. The three screens are the ones designed in Figma: a home with the **Smart Chat / Translate / Audio Chat** tiles and history, a chat, and the **Talk to Nova** voice screen with the glowing orb.
+
+![Nova home](docs/home.png)
 
 ## Design principles
 
@@ -44,10 +51,10 @@ flowchart LR
 src/
   router.js   intent understanding and slot filling (swap in an LLM here)
   memory.js   long-term Memory and short-term Context
-  tools.js    weather (Open-Meteo), time, calculator, timers, notes
+  tools.js    weather (Open-Meteo), translation (MyMemory), time, calculator, timers, notes
   nova.js     the assistant loop: understand → call tool → reply, with a trace
-app.js        UI, speech recognition and synthesis, the particle orb
-tests/        8 end-to-end conversations, run with node's built-in test runner
+app.js        the three-screen app (home, chat, voice), speech in and out, the Nova orb
+tests/        9 end-to-end conversations, run with node's built-in test runner
 ```
 
 The router is rule-based so the demo is instant, free and deterministic. It sits behind one function, `route(text, { memory, context })`, so replacing it with an LLM that returns the same `{ kind, tool, args }` shape doesn't touch the rest of the app.
@@ -56,7 +63,7 @@ The router is rule-based so the demo is instant, free and deterministic. It sits
 
 ```bash
 git clone https://github.com/murtuzabuilds/nova && cd nova
-npm test        # 8 tests, no dependencies
+npm test        # 9 tests, no dependencies
 npm start       # serves the app locally
 ```
 
@@ -70,4 +77,4 @@ Voice input works in Chrome, Edge and Safari. Firefox falls back to typing.
 
 ---
 
-Built by [Murtuza Mohammed](https://murtuzabuilds.com). MIT licensed.
+Designed and built by [Murtuza](https://murtuzabuilds.com). MIT licensed.

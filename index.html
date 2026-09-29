@@ -2,48 +2,65 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nova · voice assistant with memory</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#06080F">
+<title>Nova AI · voice assistant with memory</title>
 <meta name="description" content="A context-aware voice assistant with memory and tool calling, running entirely in your browser.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fragment+Mono&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main class="app">
-  <header class="top">
-    <div class="brand"><span class="dot"></span>Nova</div>
-    <label class="toggle"><input type="checkbox" id="speak" checked> Speak replies</label>
-  </header>
+<div class="stagebg" aria-hidden="true"></div>
+<main class="wrap">
+  <section class="phone" aria-label="Nova AI app">
+    <div class="status" aria-hidden="true"><b>9:41</b><span class="island"></span><span class="sig"><i></i><i></i><i></i><i></i><em>82</em></span></div>
 
-  <section class="stage">
-    <canvas id="orb" aria-hidden="true"></canvas>
-    <p class="state" id="state" aria-live="polite">Tap the mic or type below</p>
-  </section>
-
-  <section class="talk">
-    <ol class="log" id="log" aria-live="polite"></ol>
-    <div class="chips" id="chips">
-      <button type="button">My name is Alex</button>
-      <button type="button">I live in Madison</button>
-      <button type="button">What's the weather?</button>
-      <button type="button">And tomorrow?</button>
-      <button type="button">Remember that the demo is Friday</button>
-      <button type="button">What do you know about me?</button>
+    <!-- HOME -->
+    <div class="screen" id="home">
+      <div class="bar"><button type="button" class="ico" id="menuBtn" aria-label="Trace and memory"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h11M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+        <span class="hi" id="hi">Hi there</span><span class="avatar" id="avatar" aria-hidden="true">N</span></div>
+      <h1>How may I help<br>you today?</h1>
+      <div class="tiles">
+        <button type="button" class="tile t-chat" data-go="chat"><span class="tico"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 5h14v10H9l-4 4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+          <svg class="bot" viewBox="0 0 120 120" aria-hidden="true"><defs><radialGradient id="g1" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#C9D6F2"/></radialGradient></defs><rect x="22" y="18" width="76" height="60" rx="26" fill="url(#g1)"/><rect x="32" y="30" width="56" height="36" rx="16" fill="#0B1024"/><ellipse cx="48" cy="48" rx="7" ry="9" fill="#5AB8FF"/><ellipse cx="72" cy="48" rx="7" ry="9" fill="#5AB8FF"/><rect x="40" y="80" width="40" height="30" rx="12" fill="url(#g1)"/><circle cx="60" cy="94" r="5" fill="#4F8BFF"/></svg>
+          <b>Smart Chat</b><span class="go">↗</span></button>
+        <button type="button" class="tile t-tr" data-go="chat" data-prefill='Translate "Where is the train station?" to Spanish'><span class="tico"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 5h9M8.5 3v2M6 5c1 3 3 5 6 6M11 5c-1 3-3 6-6 7M13 20l4-9 4 9M14.5 17h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><b>Translate</b><span class="go">↗</span></button>
+        <button type="button" class="tile t-audio" data-go="voice"><span class="tico"><svg viewBox="0 0 24 24" width="18" height="18"><rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><b>Audio Chat</b><span class="go">↗</span></button>
+      </div>
+      <div class="histh"><b>History</b><small id="histCount"></small></div>
+      <ul class="hist" id="hist"></ul>
     </div>
-    <form class="bar" id="bar">
-      <button type="button" class="mic" id="mic" aria-label="Talk to Nova"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12h-2Z"/></svg></button>
-      <input id="q" autocomplete="off" placeholder="Ask Nova anything…" aria-label="Message">
-      <button class="send" aria-label="Send">↵</button>
-    </form>
+
+    <!-- CHAT -->
+    <div class="screen" id="chat" hidden>
+      <div class="bar"><button type="button" class="ico back" data-go="home" aria-label="Back">‹</button><span class="brand"><span class="logo" aria-hidden="true"></span>Nova <em>AI</em><sup>✦</sup></span><button type="button" class="ico" data-go="voice" aria-label="Voice mode"><svg viewBox="0 0 24 24" width="18" height="18"><rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 11a6 6 0 0 0 12 0" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></div>
+      <ol class="log" id="log" aria-live="polite"></ol>
+      <div class="chips" id="chips">
+        <button type="button">My name is Alex</button><button type="button">I live in Madison</button><button type="button">What's the weather?</button><button type="button">And tomorrow?</button><button type="button">Remember that the demo is Friday</button><button type="button">What do you know about me?</button>
+      </div>
+      <form class="bar2" id="bar"><input id="q" autocomplete="off" placeholder="Ask Nova anything…" aria-label="Message"><button class="send" aria-label="Send"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 12l16-8-6 16-2.5-6.5z" fill="currentColor"/></svg></button></form>
+    </div>
+
+    <!-- VOICE -->
+    <div class="screen voice" id="voice" hidden>
+      <div class="bar"><button type="button" class="ico back" data-go="home" aria-label="Back">‹</button><span class="brand small">Talk to Nova <em>AI</em><sup>✦</sup></span><span class="ico" aria-hidden="true">ⓘ</span></div>
+      <p class="listen" id="state">Tap the mic. How can I assist?</p>
+      <canvas id="orb" aria-hidden="true"></canvas>
+      <p class="said" id="said">Ask about the weather, translate a phrase, or tell me your name.</p>
+      <div class="ctrl"><button type="button" class="c-sm" id="pause" aria-label="Stop speaking">❚❚</button><button type="button" class="mic" id="mic" aria-label="Talk to Nova"><svg viewBox="0 0 24 24" width="26" height="26"><path fill="currentColor" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12h-2Z"/></svg></button><button type="button" class="c-sm" data-go="home" aria-label="Close">✕</button></div>
+    </div>
+    <div class="homebar" aria-hidden="true"></div>
   </section>
 
-  <aside class="side">
+  <aside class="side" id="side">
+    <div class="sideh"><span class="brand"><span class="logo" aria-hidden="true"></span>Nova <em>AI</em><sup>✦</sup></span><label class="toggle"><input type="checkbox" id="speak" checked> Speak replies</label></div>
+    <p class="lede">A voice assistant that remembers what you tell it, fills in what you don't say, and shows every decision it makes.</p>
     <h2>Trace</h2>
-    <ol class="trace" id="trace"><li class="empty">Every decision Nova makes shows up here: what it understood, what it pulled from memory, which tool it called.</li></ol>
+    <ol class="trace" id="trace"><li class="empty">Every step appears here: what Nova understood, what it pulled from memory or the last turn, and which tool it called.</li></ol>
     <h2>Memory <button type="button" class="forget" id="forget">Forget all</button></h2>
     <ul class="mem" id="mem"></ul>
-    <p class="fine">Memory lives only in this browser. Weather comes from Open-Meteo. Voice uses your browser's speech engine.</p>
+    <p class="fine">Memory stays in this browser. Weather from Open-Meteo, translation from MyMemory, voice from your browser's speech engine. <a href="https://github.com/murtuzabuilds/nova">Code on GitHub</a>. Designed and built by <a href="https://murtuzabuilds.com">Murtuza</a>.</p>
   </aside>
 </main>
 <script type="module" src="app.js"></script>

@@ -30,6 +30,8 @@ export function route(text, { memory, context }) {
     if (!city) return { kind: 'ask', say: 'Which city? You can also tell me "I live in ..." and I\'ll remember it.' };
     return { kind: 'tool', tool: 'weather', args: { city, day }, filled: cityM ? [] : ['city'] };
   }
+  if ((m = text.trim().match(/^(?:translate|how do (?:you|i) say)\s+["“']?(.+?)["”']?\s+(?:to|in|into)\s+([a-z]+)\s*\??$/i)))
+    return { kind: 'tool', tool: 'translate', args: { text: m[1], lang: m[2].toLowerCase() } };
   if ((m = t.match(/(?:timer|remind me) (?:for |in )?(\d+) ?(?:min|minute)/))) return { kind: 'tool', tool: 'timer', args: { minutes: +m[1] } };
   if ((m = t.match(/^(?:what is |what's |calculate |compute )?([\d\s.+\-*/()%x]+)$/)) && /\d\s*[+\-*/x%]\s*\d/.test(m[1]))
     return { kind: 'tool', tool: 'calculate', args: { expr: m[1].replace(/x/g, '*').trim() } };

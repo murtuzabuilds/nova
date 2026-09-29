@@ -8,6 +8,7 @@ const mapStore = () => { const m = new Map(); return { getItem: k => m.get(k) ??
 const fakeFetch = async url => ({
   json: async () => url.includes('geocoding')
     ? { results: [{ name: decodeURIComponent(url.match(/name=([^&]+)/)[1]).replace(/\b\w/g, c => c.toUpperCase()), latitude: 43.07, longitude: -89.4 }] }
+    : url.includes('mymemory') ? { responseData: { translatedText: 'Hola, ¿cómo estás?' } }
     : { daily: { temperature_2m_max: [71.4, 64.2], temperature_2m_min: [52.1, 48.9], weather_code: [2, 61] } },
 });
 const make = () => { const memory = new Memory(mapStore()); return new Nova({ memory, context: new Context(), fetchImpl: fakeFetch, now: () => new Date('2026-09-28T15:30:00') }); };
@@ -63,4 +64,10 @@ test('memory persists across sessions through the store', () => {
   const store = mapStore();
   new Memory(store).remember('city', 'Madison');
   assert.equal(new Memory(store).recall('city'), 'Madison');
+});
+
+test('translate is a tool call with language detection', async () => {
+  const r = await make().ask('Translate "Hello, how are you?" to Spanish');
+  assert.equal(r.say, 'In Spanish: Hola, ¿cómo estás?');
+  assert.ok(r.trace.some(s => /translate\(text=Hello, how are you\?, lang=spanish\)/.test(s.detail)));
 });

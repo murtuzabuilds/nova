@@ -3,6 +3,9 @@
 
 const WMO = { 0: 'clear', 1: 'mostly clear', 2: 'partly cloudy', 3: 'overcast', 45: 'foggy', 48: 'foggy', 51: 'drizzly', 53: 'drizzly', 55: 'drizzly', 61: 'light rain', 63: 'rain', 65: 'heavy rain', 71: 'light snow', 73: 'snow', 75: 'heavy snow', 80: 'showers', 81: 'showers', 82: 'heavy showers', 95: 'stormy' };
 
+const LANGS = { spanish: 'es', french: 'fr', german: 'de', hindi: 'hi', arabic: 'ar', japanese: 'ja', chinese: 'zh', italian: 'it', portuguese: 'pt', korean: 'ko', urdu: 'ur', bengali: 'bn' };
+const cap = s => s[0].toUpperCase() + s.slice(1);
+
 export function makeTools({ fetchImpl = globalThis.fetch, now = () => new Date(), memory, timers = [] } = {}) {
   return {
     async weather({ city, day = 'today' }) {
@@ -37,6 +40,14 @@ export function makeTools({ fetchImpl = globalThis.fetch, now = () => new Date()
       notes.push(text);
       memory?.remember('notes', JSON.stringify(notes), 'tool');
       return { say: `Noted. You have ${notes.length} note${notes.length === 1 ? '' : 's'}.`, data: { notes } };
+    },
+    async translate({ text, lang }) {
+      const code = LANGS[lang.toLowerCase()];
+      if (!code) return { say: `I can translate into ${Object.keys(LANGS).slice(0, 6).join(', ')} and a few more.`, data: null };
+      const r = await (await fetchImpl(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${code}`)).json();
+      const out = r?.responseData?.translatedText;
+      if (!out) return { say: "The translation service didn't answer.", data: null };
+      return { say: `In ${cap(lang)}: ${out}`, data: { text, lang: code, out } };
     },
     listNotes() {
       const notes = JSON.parse(memory?.recall('notes') || '[]');
