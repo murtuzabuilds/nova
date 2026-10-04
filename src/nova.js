@@ -13,7 +13,7 @@ export class Nova {
     const r = route(text, { memory: this.memory, context: this.context });
     trace.push({ step: 'understand', detail: r.kind === 'tool' ? `intent: ${r.tool}` : `intent: ${r.kind}` });
     this.context.push('user', text);
-    let say;
+    let say, data = null;
     const name = this.memory.recall('name');
 
     switch (r.kind) {
@@ -42,7 +42,7 @@ export class Nova {
         trace.push({ step: 'tool', detail: `${r.tool}(${Object.entries(r.args).map(([k, v]) => `${k}=${v}`).join(', ')})` });
         try {
           const out = await this.tools[r.tool](r.args);
-          say = out.say;
+          say = out.say; data = out.data ?? null;
           this.context.set(r.tool, r.args);
           trace.push({ step: 'result', detail: out.data ? JSON.stringify(out.data).slice(0, 120) : 'no data' });
         } catch (e) {
@@ -56,6 +56,6 @@ export class Nova {
       default: say = "I can check the weather, tell the time, do math, set timers and remember things. Try: \"what's the weather tomorrow?\"";
     }
     this.context.push('nova', say);
-    return { say, trace, route: r };
+    return { say, trace, route: r, data };   // data: the tool's structured result, so the UI can draw a card
   }
 }

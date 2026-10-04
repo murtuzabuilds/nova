@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112 164" role="img" aria-label="Nova robot">
+  <defs>
+    <linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#EEF2FA"/><stop offset="1" stop-color="#C4CEE4"/></linearGradient>
+    <linearGradient id="ws" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B9C4DC"/><stop offset=".35" stop-color="#F4F7FC"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+    <radialGradient id="wb" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".65" stop-color="#E6EBF6"/><stop offset="1" stop-color="#AEB9D3"/></radialGradient>
+    <linearGradient id="d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E3442"/><stop offset="1" stop-color="#0B0D13"/></linearGradient>
+    <linearGradient id="vis" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#232B3B"/><stop offset=".45" stop-color="#090B11"/><stop offset="1" stop-color="#05060A"/></linearGradient>
+    <radialGradient id="ear" cx=".4" cy=".35" r=".75"><stop offset="0" stop-color="#3A4254"/><stop offset=".55" stop-color="#11141C"/><stop offset="1" stop-color="#05060A"/></radialGradient>
+    <linearGradient id="eye" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FE4FF"/><stop offset=".5" stop-color="#22B4FF"/><stop offset="1" stop-color="#1A7DFF"/></linearGradient>
+    <linearGradient id="sole" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FA8E6"/><stop offset="1" stop-color="#4C68B8"/></linearGradient>
+    <filter id="glow" x="-80%" y="-40%" width="260%" height="180%"><feGaussianBlur stdDeviation="1.6"/></filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="160%"><feGaussianBlur stdDeviation="2.2"/></filter>
+  </defs>
+
+  <!-- ground shadow -->
+  <ellipse cx="56" cy="157" rx="36" ry="4.5" fill="#1B3F9A" opacity=".45" filter="url(#soft)"/>
+
+  <!-- far arm (viewer's right) -->
+  <path d="M77 77c4-1.5 7 .5 8 4l1 6-7 2-3-6z" fill="url(#w)"/>
+  <path d="M82 86l6 1 3 8-6 2z" fill="url(#d)"/>
+  <path d="M84 91c4-3 10-2 13 2l5 13c1 3-1 6-4 7l-5 1c-3 0-5-2-6-5z" fill="url(#wb)"/>
+  <circle cx="92" cy="101" r="1.7" fill="#1C2130"/><circle cx="92" cy="101" r=".7" fill="#35A9FF"/>
+  <path d="M92 112c3-2 8-2 11 1l3 9c1 4-1 9-4 12l-3 1 1-6-3 7-3-1 2-7-4 5-2-2 3-8z" fill="url(#d)"/>
+
+  <!-- legs -->
+  <ellipse cx="74" cy="118" rx="8.5" ry="9" fill="url(#wb)"/>
+  <path d="M68 124c3-2 9-2 12 0l1 10-13 1z" fill="url(#d)"/>
+  <path d="M65 133c4-2 11-2 15 0l2 10H64z" fill="url(#w)"/>
+  <path d="M56 151c0-7 5-12 12-12h9c8 0 14 5 15 12z" fill="url(#w)"/>
+  <path d="M66 139h14l1 5c-5 2-11 2-16 0z" fill="#1A1E2A"/>
+  <path d="M54 150h39c2 0 3 1.5 3 3.5s-1.5 4.5-4 4.5H55c-2.5 0-4-2-4-4.5s1-3.5 3-3.5z" fill="url(#sole)"/>
+  <path d="M54 150h39c1.5 0 2.5.8 2.8 2H51.2c.3-1.2 1.3-2 2.8-2z" fill="#B9CAF5"/>
+  <ellipse cx="39" cy="120" rx="10.5" ry="10.5" fill="url(#wb)"/>
+  <circle cx="32" cy="119.5" r="2" fill="#E0483F"/><circle cx="32" cy="119.5" r="2.8" fill="none" stroke="#1C2130" stroke-width=".8"/>
+  <path d="M33 128c3-2 10-2 13 0l1 10-14 1z" fill="url(#d)"/>
+  <path d="M30 136c4-2 11-2 15 0l1 9H29z" fill="url(#w)"/>
+  <path d="M19 153c0-7 5-12 12-12h9c8 0 13 5 14 12z" fill="url(#w)"/>
+  <path d="M30 141h14l1 5c-5 2-11 2-16 0z" fill="#1A1E2A"/>
+  <path d="M17 152h39c2 0 3 1.5 3 3.5s-1.5 4.5-4 4.5H18c-2.5 0-4-2-4-4.5s1-3.5 3-3.5z" fill="url(#sole)"/>
+  <path d="M17 152h39c1.5 0 2.5.8 2.8 2H14.2c.3-1.2 1.3-2 2.8-2z" fill="#B9CAF5"/>
+
+  <!-- pelvis and waist -->
+  <ellipse cx="57" cy="116" rx="11" ry="10" fill="url(#wb)"/>
+  <path d="M40 101h29l-2 8H43z" fill="url(#d)"/>
+
+  <!-- torso -->
+  <path d="M33 71c8-4 34-4 42 0 3 2 4 6 3 10l-4 17c-1 4-4 6-8 6H45c-4 0-7-2-8-6l-5-17c-1-4 0-8 1-10z" fill="url(#w)"/>
+  <path d="M33 71c8-4 34-4 42 0 2 1 3 3 3.5 5-12-3-34-3-46 0 0-2 .2-4 .5-5z" fill="#7F8DB3" opacity=".45"/>
+  <path d="M38 74c3 8 9 14 14 26" fill="none" stroke="#AAB6D2" stroke-width=".7"/>
+  <rect x="56" y="83" width="15.5" height="7.5" rx="1.8" fill="#12151D"/>
+  <rect x="58" y="84.8" width="5" height="4" rx="1" fill="#C9D3E6"/><rect x="64.5" y="84.8" width="5" height="4" rx="1" fill="#C9D3E6"/>
+  <path d="M48 64h17l2 7H46z" fill="url(#d)"/>
+
+  <!-- near arm (viewer's left) -->
+  <ellipse cx="35.5" cy="84" rx="7" ry="11.5" fill="url(#ear)" transform="rotate(-8 35.5 84)"/>
+  <path d="M19 78c3-5 10-6 14-2l2 6-9 7-7-4z" fill="url(#wb)"/>
+  <path d="M10 91c2-5 8-7 13-5l5 3-2 22c0 3-3 5-6 5h-8c-3 0-5-2-5-5z" fill="url(#ws)"/>
+  <path d="M12 100c2-1 4-1 5 1m-6 5c2-1 5-1 7 1" fill="none" stroke="#35A9FF" stroke-width=".9" stroke-linecap="round"/>
+  <path d="M7 114h17l1 9c0 2-1 3-3 3H9c-2 0-3-1-3-3z" fill="url(#w)"/>
+  <path d="M8 125l3 12 3 1-1-9 3 10 3 1-1-10 3 9 3-1-1-13zM24 114c4 2 7 7 8 13l1 9-3 2-3-10-2 1z" fill="url(#d)"/>
+
+  <!-- head -->
+  <path d="M31 4h43c13 0 20 8 20 22v14c0 15-8 24-22 24H40C24 64 14 55 14 39V26C14 12 20 4 31 4z" fill="url(#w)"/>
+  <path d="M31 4c-11 0-17 8-17 22v13c0 16 10 25 26 25h4C36 58 34 44 35 30c1-12 4-21 9-26z" fill="url(#ws)"/>
+  <path d="M44 4c-5 5-8 14-9 26-1 14 1 28 9 34" fill="none" stroke="#AAB6D2" stroke-width=".8"/>
+  <path d="M40 14c14-3 36-3 50 2" fill="none" stroke="#C4CEE4" stroke-width=".8"/>
+  <path d="M34 8c12-3 30-3 42-1" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" opacity=".9"/>
+  <path d="M14 39c0 16 10 25 26 25h32c14 0 22-9 22-24v-6c-2 14-10 21-24 21H42C28 55 17 50 14 39z" fill="#8E9CC0" opacity=".38"/>
+  <!-- ear disc with blue ring -->
+  <ellipse cx="23" cy="36" rx="10.5" ry="17" fill="#22B4FF" filter="url(#glow)" opacity=".7"/>
+  <ellipse cx="23" cy="36" rx="10" ry="16.5" fill="#1FA8FF"/>
+  <ellipse cx="23.5" cy="36" rx="8.2" ry="14.5" fill="url(#ear)"/>
+  <ellipse cx="24" cy="36" rx="5" ry="9.5" fill="none" stroke="#3B4458" stroke-width=".9"/>
+  <ellipse cx="21" cy="29" rx="1.8" ry="3.5" fill="#FFFFFF" opacity=".35"/>
+  <!-- visor and eyes -->
+  <rect x="42.6" y="18.6" width="49.8" height="37.8" rx="12.4" fill="#D3DBEC"/>
+  <rect x="44" y="20" width="47" height="35" rx="11" fill="url(#vis)"/>
+  <path d="M50 23h34c3 0 5 2 5 5-12-3-30-3-43 1 0-3 2-6 4-6z" fill="#FFFFFF" opacity=".08"/>
+  <g filter="url(#glow)" opacity=".9"><ellipse cx="58" cy="35" rx="4" ry="8.5" fill="#22B4FF"/><ellipse cx="80" cy="35" rx="4" ry="8.5" fill="#22B4FF"/></g>
+  <ellipse cx="58" cy="35" rx="3.3" ry="7.8" fill="none" stroke="url(#eye)" stroke-width="2.2"/>
+  <ellipse cx="80" cy="35" rx="3.3" ry="7.8" fill="none" stroke="url(#eye)" stroke-width="2.2"/>
+  <ellipse cx="58" cy="35" rx="1.2" ry="5" fill="#0B63D6" opacity=".55"/><ellipse cx="80" cy="35" rx="1.2" ry="5" fill="#0B63D6" opacity=".55"/>
+</svg>

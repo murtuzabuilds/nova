@@ -4,64 +4,240 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#06080F">
+<meta name="theme-color" content="#000000">
 <title>Nova AI · voice assistant with memory</title>
 <meta name="description" content="A context-aware voice assistant with memory and tool calling, running entirely in your browser.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="stagebg" aria-hidden="true"></div>
+
+<!-- icon set: thin line icons as drawn on the UI boards -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="gAI" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#00C7BE"/><stop offset="1" stop-color="#4F8CFF"/></linearGradient>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h13.5M3 18h9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M14.5 4.5H8A3.5 3.5 0 0 0 4.5 8v6A3.5 3.5 0 0 0 8 17.5h1.3l1.9 2.1a1.1 1.1 0 0 0 1.6 0l1.9-2.1H16a3.5 3.5 0 0 0 3.5-3.5V9.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18.4" cy="5.6" r="2.1" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-translate" viewBox="0 0 24 24"><rect x="3" y="3.5" width="11.5" height="12" rx="2.2" fill="currentColor"/><path d="M6.2 12.5l2.550-6 2.550 6M7.1 10.6h3.3" fill="none" stroke="var(--cut,#0b0b0b)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.4 8.5H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7.5a2 2 0 0 1-2-2v-1.3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M12.8 12.6h5.4M15.5 11.4v1.2M17.3 12.6c-.5 2.3-2 3.9-4.3 4.9M13.9 14.4c.9 1.5 2.3 2.5 4.2 3.1" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="8.7" y="3.2" width="6.6" height="11" rx="3.3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5.6 11.2a6.4 6.4 0 0 0 12.8 0M12 17.6v3.2M9.3 20.8h5.4M10.4 7h3.2M10.4 9.4h3.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-micfill" viewBox="0 0 24 24"><rect x="8.6" y="2.5" width="6.8" height="12" rx="3.4" fill="currentColor"/><path d="M5.4 11a6.6 6.6 0 0 0 13.2 0M12 17.6v3.4M9 21h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M6 18L18 6M8.5 6H18v9.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrowlg" viewBox="0 0 24 24"><path d="M3.5 20.5L20.5 3.5M7 3.5h13.5V17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 5.5l6.5 6.5L9 18.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M5.5 9l6.5 6.5L18.5 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-updown" viewBox="0 0 24 24"><path d="M7 9.5l5-5 5 5M7 14.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M4.5 4.5l15 15M19.5 4.5l-15 15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="3.8" height="14" rx="1" fill="currentColor"/><rect x="13.7" y="5" width="3.8" height="14" rx="1" fill="currentColor"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.8" fill="currentColor"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/><circle cx="19" cy="12" r="1.8" fill="currentColor"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7.2v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16.6" r="1.1" fill="currentColor"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.5c0 6.2 3.3 9.5 9.5 9.5-6.2 0-9.5 3.3-9.5 9.5 0-6.2-3.3-9.5-9.5-9.5 6.2 0 9.5-3.3 9.5-9.5z" fill="currentColor"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19V5.5M6 11.5l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9.5 20.5v-6h5v6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 3.5l1.3 2.3 2.6-.6.7 2.6 2.5.9-.9 2.5 1.8 1.9-1.8 1.9.9 2.5-2.5.9-.7 2.6-2.6-.6L12 22.6l-1.3-2.3-2.6.6-.7-2.6-2.5-.9.9-2.5L4 13l1.8-1.9-.9-2.5 2.5-.9.7-2.6 2.6.6z" transform="translate(0 -1)" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <!-- reply actions -->
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 5.5A1.5 1.5 0 0 0 14.5 4H6.5A2.5 2.5 0 0 0 4 6.5v8A1.5 1.5 0 0 0 5.5 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M8 20H5.5A1.5 1.5 0 0 1 4 18.5v-7A1.5 1.5 0 0 1 5.5 10H8m0 10V10m0 10h8.6a2.5 2.5 0 0 0 2.450-2l1-5a2.5 2.5 0 0 0-2.450-3H14l.7-3.3A2.2 2.2 0 0 0 12.550 4L8 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-downv" viewBox="0 0 24 24"><path d="M8 4H5.5A1.5 1.5 0 0 0 4 5.5v7A1.5 1.5 0 0 0 5.5 14H8M8 4v10M8 4h8.6a2.5 2.5 0 0 1 2.450 2l1 5a2.5 2.5 0 0 1-2.450 3H14l.7 3.3a2.2 2.2 0 0 1-2.150 2.7L8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-speak" viewBox="0 0 24 24"><path d="M4 9.5h3l4.5-4v13l-4.5-4H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15 9a4.2 4.2 0 0 1 0 6M17.8 6.5a8 8 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-retry" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 0 1-13.2 4.9M4.5 12a7.5 7.5 0 0 1 13.2-4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18 3.5v4h-4M6 20.5v-4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <!-- settings glyphs: solid, as on the Smart Settings board -->
+    <symbol id="s-person" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 4.8a3.4 3.4 0 1 1 0 6.8 3.4 3.4 0 0 1 0-6.8zm0 13a7.9 7.9 0 0 1-6-2.750c1.150-1.9 3.4-3.050 6-3.050s4.850 1.150 6 3.050a7.9 7.9 0 0 1-6 2.750z" fill="currentColor"/></symbol>
+    <symbol id="s-pin" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 5.2 6.1 11.4 6.9 12.2a.9.9 0 0 0 1.2 0c.8-.8 6.9-7 6.9-12.2A7.5 7.5 0 0 0 12 2zm0 4.7a2.9 2.9 0 1 1 0 5.8 2.9 2.9 0 0 1 0-5.8z" fill="currentColor"/></symbol>
+    <symbol id="s-temp" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2a3.5 3.5 0 0 0-3.5 3.5v7.3a5.5 5.5 0 1 0 7 0V5.5A3.5 3.5 0 0 0 12 2zm-1 5.5a1 1 0 0 1 2 0v6.4a3 3 0 1 1-2 0z" fill="currentColor"/></symbol>
+    <symbol id="s-note" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M9.5 2A1.5 1.5 0 0 0 8 3.5H6.5A2.5 2.5 0 0 0 4 6v13.5A2.5 2.5 0 0 0 6.5 22h11a2.5 2.5 0 0 0 2.5-2.5V6a2.5 2.5 0 0 0-2.5-2.5H16A1.5 1.5 0 0 0 14.5 2zM7.5 10a.9.9 0 0 1 .9-.9h7.2a.9.9 0 0 1 0 1.8H8.4a.9.9 0 0 1-.9-.9zm.9 3.1a.9.9 0 0 0 0 1.8h7.2a.9.9 0 0 0 0-1.8zm-.9 4.9a.9.9 0 0 1 .9-.9h4.2a.9.9 0 0 1 0 1.8H8.4a.9.9 0 0 1-.9-.9z" fill="currentColor"/></symbol>
+    <symbol id="s-wave" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M5.5 2.5A3 3 0 0 0 2.5 5.5v13a3 3 0 0 0 3 3h13a3 3 0 0 0 3-3v-13a3 3 0 0 0-3-3zM12 6.4a.9.9 0 0 1 .9.9v9.4a.9.9 0 0 1-1.8 0V7.3a.9.9 0 0 1 .9-.9zM8.6 9a.9.9 0 0 1 .9.9v4.2a.9.9 0 0 1-1.8 0V9.9a.9.9 0 0 1 .9-.9zm6.8 0a.9.9 0 0 1 .9.9v4.2a.9.9 0 0 1-1.8 0V9.9a.9.9 0 0 1 .9-.9zm-10.2 1.9a.9.9 0 0 1 .9.9v.4a.9.9 0 0 1-1.8 0v-.4a.9.9 0 0 1 .9-.9zm13.6 0a.9.9 0 0 1 .9.9v.4a.9.9 0 0 1-1.8 0v-.4a.9.9 0 0 1 .9-.9z" fill="currentColor"/></symbol>
+    <symbol id="s-speaker" viewBox="0 0 24 24"><path d="M3 9.7A1.2 1.2 0 0 1 4.2 8.5h2.9l4.3-3.8a1 1 0 0 1 1.6.8v13a1 1 0 0 1-1.6.8l-4.3-3.8H4.2A1.2 1.2 0 0 1 3 14.3z" fill="currentColor"/><path d="M16 8.8a4.5 4.5 0 0 1 0 6.4M18.6 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="s-trash" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M9.8 2a1.8 1.8 0 0 0-1.7 1.3L7.8 4.5H4.5a1 1 0 0 0 0 2h15a1 1 0 1 0 0-2h-3.3l-.3-1.2A1.8 1.8 0 0 0 14.2 2zM5.6 8l.9 11.5A2.7 2.7 0 0 0 9.2 22h5.6a2.7 2.7 0 0 0 2.7-2.5L18.4 8zm4 3a.9.9 0 0 1 .9.9v5.2a.9.9 0 0 1-1.8 0v-5.2a.9.9 0 0 1 .9-.9zm4.8 0a.9.9 0 0 1 .9.9v5.2a.9.9 0 0 1-1.8 0v-5.2a.9.9 0 0 1 .9-.9z" fill="currentColor"/></symbol>
+    <symbol id="s-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M2.5 12h19M12 2.5c-3 2.6-4.3 5.8-4.3 9.5s1.3 6.9 4.3 9.5c3-2.6 4.3-5.8 4.3-9.5S15 5.1 12 2.5zM4 7.3h16M4 16.7h16" fill="none" stroke="var(--cut,#0f0f0f)" stroke-width="1.3"/></symbol>
+    <symbol id="s-shield" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2 4 5v6.2c0 5 3.3 9.3 8 10.8 4.7-1.5 8-5.8 8-10.8V5zm-1 6.2h2v7.6h-2z" fill="currentColor"/></symbol>
+    <symbol id="s-cloud" viewBox="0 0 24 24"><path d="M7 19.5a5 5 0 0 1-.9-9.9A6.5 6.5 0 0 1 18.7 11 4.3 4.3 0 0 1 18 19.5z" fill="currentColor"/></symbol>
+    <symbol id="s-route" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M5.5 2.5a3 3 0 0 0-3 3v13a3 3 0 0 0 3 3h13a3 3 0 0 0 3-3v-13a3 3 0 0 0-3-3zm2 4.2a1.8 1.8 0 0 1 1.7 1.2h4.3a3.2 3.2 0 0 1 0 6.4h-3a1.4 1.4 0 0 0 0 2.8h4.3a1.8 1.8 0 1 1 0 1.2h-4.3a2.6 2.6 0 0 1 0-5.2h3a2 2 0 0 0 0-4H9.2a1.8 1.8 0 1 1-1.7-2.4z" fill="currentColor"/></symbol>
+    <symbol id="s-code" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M5.5 2.5a3 3 0 0 0-3 3v13a3 3 0 0 0 3 3h13a3 3 0 0 0 3-3v-13a3 3 0 0 0-3-3zm4.4 6.3a.9.9 0 0 1 0 1.3L8 12l1.9 1.9a.9.9 0 1 1-1.3 1.3l-2.5-2.6a.9.9 0 0 1 0-1.2l2.5-2.6a.9.9 0 0 1 1.3 0zm4.2 0a.9.9 0 0 1 1.3 0l2.5 2.6a.9.9 0 0 1 0 1.2l-2.5 2.6a.9.9 0 1 1-1.3-1.3L16 12l-1.9-1.9a.9.9 0 0 1 0-1.3z" fill="currentColor"/></symbol>
+    <symbol id="s-star" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M5.5 2.5a3 3 0 0 0-3 3v13a3 3 0 0 0 3 3h13a3 3 0 0 0 3-3v-13a3 3 0 0 0-3-3zM12 6c0 3.9 2.1 6 6 6-3.9 0-6 2.1-6 6 0-3.9-2.1-6-6-6 3.9 0 6-2.1 6-6z" fill="currentColor"/></symbol>
+    <!-- weather glyphs for the forecast card -->
+    <symbol id="w-sun" viewBox="0 0 48 48"><circle cx="24" cy="24" r="9" fill="#FFD25A"/><path d="M24 5v6M24 37v6M5 24h6M37 24h6M10.6 10.6l4.2 4.2M33.2 33.2l4.2 4.2M10.6 37.4l4.2-4.2M33.2 14.8l4.2-4.2" stroke="#FFD25A" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="w-part" viewBox="0 0 48 48"><circle cx="18" cy="17" r="8" fill="#FFD25A"/><path d="M18 3v4M5 17h4M8.8 7.8l2.8 2.8M27.2 7.8l-2.8 2.8" stroke="#FFD25A" stroke-width="2.6" stroke-linecap="round"/><path d="M16 40a8 8 0 0 1-1-15.9A11 11 0 0 1 36 26a7 7 0 0 1-1 14z" fill="#E8EEFB"/></symbol>
+    <symbol id="w-cloud" viewBox="0 0 48 48"><path d="M14 38a9 9 0 0 1-1.2-17.9A12.5 12.5 0 0 1 36.5 22 8 8 0 0 1 35 38z" fill="#E8EEFB"/></symbol>
+    <symbol id="w-rain" viewBox="0 0 48 48"><path d="M14 30a8 8 0 0 1-1-15.9A11.5 11.5 0 0 1 35 16a7 7 0 0 1-1 14z" fill="#E8EEFB"/><path d="M16 35l-2 6M24 35l-2 6M32 35l-2 6" stroke="#7FE4FF" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="w-snow" viewBox="0 0 48 48"><path d="M14 30a8 8 0 0 1-1-15.9A11.5 11.5 0 0 1 35 16a7 7 0 0 1-1 14z" fill="#E8EEFB"/><circle cx="15" cy="38" r="2.2" fill="#fff"/><circle cx="24" cy="40" r="2.2" fill="#fff"/><circle cx="33" cy="38" r="2.2" fill="#fff"/></symbol>
+    <symbol id="w-fog" viewBox="0 0 48 48"><path d="M14 27a8 8 0 0 1-1-15.9A11.5 11.5 0 0 1 35 13a7 7 0 0 1-1 14z" fill="#E8EEFB"/><path d="M9 33h30M13 39h22" stroke="#C3CCE0" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="w-storm" viewBox="0 0 48 48"><path d="M14 29a8 8 0 0 1-1-15.9A11.5 11.5 0 0 1 35 15a7 7 0 0 1-1 14z" fill="#E8EEFB"/><path d="M25 27l-6 9h5l-2 8 8-11h-5z" fill="#FFD25A"/></symbol>
+  </defs>
+</svg>
+
 <main class="wrap">
   <section class="phone" aria-label="Nova AI app">
-    <div class="status" aria-hidden="true"><b>9:41</b><span class="island"></span><span class="sig"><i></i><i></i><i></i><i></i><em>82</em></span></div>
+    <div class="bezel">
+    <div class="status" aria-hidden="true">
+      <b>9:41<svg viewBox="0 0 12 12" width="11" height="11"><path d="M11 1 1.2 5.2l4.3 1.3L6.8 11z" fill="currentColor"/></svg></b>
+      <span class="island"></span>
+      <span class="sig"><svg viewBox="0 0 18 12" width="17" height="11"><rect x="0" y="7.5" width="3" height="4.5" rx=".8" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx=".8" fill="currentColor"/><rect x="10" y="2.5" width="3" height="9.5" rx=".8" fill="currentColor" opacity=".4"/><rect x="15" y="0" width="3" height="12" rx=".8" fill="currentColor" opacity=".4"/></svg><svg viewBox="0 0 17 12" width="16" height="11.5"><path d="M8.5 2.3c2.3 0 4.4.9 6 2.4l1.1-1.2A10.3 10.3 0 0 0 8.5.6 10.3 10.3 0 0 0 1.4 3.5l1.1 1.2a8.7 8.7 0 0 1 6-2.4zm0 3.5c1.4 0 2.6.5 3.6 1.4l1.1-1.2a6.8 6.8 0 0 0-9.4 0l1.1 1.2c1-.9 2.2-1.4 3.6-1.4zm2.2 2.9L8.5 11.2 6.3 8.7a3.2 3.2 0 0 1 4.4 0z" fill="currentColor"/></svg><span class="batt"><i></i><em>32</em></span></span>
+    </div>
 
-    <!-- HOME -->
-    <div class="screen" id="home">
-      <div class="bar"><button type="button" class="ico" id="menuBtn" aria-label="Trace and memory"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h11M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-        <span class="hi" id="hi">Hi there</span><span class="avatar" id="avatar" aria-hidden="true">N</span></div>
-      <h1>How may I help<br>you today?</h1>
+    <!-- SPLASH: board 03 centre phone, board 07 -->
+    <div class="screen" id="splash" hidden>
+      <img class="lockup" src="assets/logo.svg" alt="Nova AI" width="111" height="32">
+      <img class="hero" src="assets/robot-splash.svg" alt="" width="290" height="311">
+      <h1 class="tagline">Providing The<br>Best Solutions</h1>
+      <p class="sub">AI assistant can answer any of<br>your question. Just ask!</p>
+      <button type="button" class="cta" id="start">Start a conversation</button>
+      <p class="tiny">No account needed. <b>Memory stays in this browser.</b></p>
+    </div>
+
+    <!-- HOME: boards 01, 09 -->
+    <div class="screen" id="home" hidden>
+      <header class="bar">
+        <button type="button" class="ico" data-menu aria-label="Menu"><svg class="i"><use href="#i-menu"/></svg></button>
+        <span class="hi"><span data-hi>Hi there</span> <span class="wave" aria-hidden="true">👋</span></span>
+        <button type="button" class="avatar" data-go="settings" data-avatar aria-label="Settings and memory">N</button>
+      </header>
+      <h1 class="ask">How may I help<br>you today ?</h1>
       <div class="tiles">
-        <button type="button" class="tile t-chat" data-go="chat"><span class="tico"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 5h14v10H9l-4 4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
-          <svg class="bot" viewBox="0 0 120 120" aria-hidden="true"><defs><radialGradient id="g1" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#C9D6F2"/></radialGradient></defs><rect x="22" y="18" width="76" height="60" rx="26" fill="url(#g1)"/><rect x="32" y="30" width="56" height="36" rx="16" fill="#0B1024"/><ellipse cx="48" cy="48" rx="7" ry="9" fill="#5AB8FF"/><ellipse cx="72" cy="48" rx="7" ry="9" fill="#5AB8FF"/><rect x="40" y="80" width="40" height="30" rx="12" fill="url(#g1)"/><circle cx="60" cy="94" r="5" fill="#4F8BFF"/></svg>
-          <b>Smart Chat</b><span class="go">↗</span></button>
-        <button type="button" class="tile t-tr" data-go="chat" data-prefill='Translate "Where is the train station?" to Spanish'><span class="tico"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 5h9M8.5 3v2M6 5c1 3 3 5 6 6M11 5c-1 3-3 6-6 7M13 20l4-9 4 9M14.5 17h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><b>Translate</b><span class="go">↗</span></button>
-        <button type="button" class="tile t-audio" data-go="voice"><span class="tico"><svg viewBox="0 0 24 24" width="18" height="18"><rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><b>Audio Chat</b><span class="go">↗</span></button>
+        <button type="button" class="tile t-chat" data-go="chat">
+          <span class="tico"><svg class="i"><use href="#i-chat"/></svg></span>
+          <img class="bot" src="assets/robot-chat.svg" alt="" width="101" height="148">
+          <b>Smart Chat</b><span class="go"><svg class="i"><use href="#i-arrow"/></svg></span>
+        </button>
+        <button type="button" class="tile t-tr" data-go="chat" data-prefill='Translate "Where is the train station?" to Spanish'>
+          <span class="tico"><svg class="i"><use href="#i-translate"/></svg></span>
+          <b>Translate</b><span class="go"><svg class="i"><use href="#i-arrow"/></svg></span>
+        </button>
+        <button type="button" class="tile t-audio" data-go="voice">
+          <span class="tico"><svg class="i"><use href="#i-mic"/></svg></span>
+          <b>Audio Chat</b><span class="go"><svg class="i"><use href="#i-arrow"/></svg></span>
+        </button>
       </div>
-      <div class="histh"><b>History</b><small id="histCount"></small></div>
+      <div class="histh"><b>History</b><button type="button" data-go="history">See all <svg class="i"><use href="#i-chev"/></svg></button></div>
       <ul class="hist" id="hist"></ul>
     </div>
 
-    <!-- CHAT -->
+    <!-- CHAT: board 10, Talk with Nova AI -->
     <div class="screen" id="chat" hidden>
-      <div class="bar"><button type="button" class="ico back" data-go="home" aria-label="Back">‹</button><span class="brand"><span class="logo" aria-hidden="true"></span>Nova <em>AI</em><sup>✦</sup></span><button type="button" class="ico" data-go="voice" aria-label="Voice mode"><svg viewBox="0 0 24 24" width="18" height="18"><rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 11a6 6 0 0 0 12 0" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></div>
+      <header class="bar">
+        <button type="button" class="ico" data-menu aria-label="Menu"><svg class="i"><use href="#i-menu"/></svg></button>
+        <span class="hi"><span data-hi>Hi there</span> <span class="wave" aria-hidden="true">👋</span></span>
+        <button type="button" class="avatar" data-go="settings" data-avatar aria-label="Settings and memory">N</button>
+      </header>
       <ol class="log" id="log" aria-live="polite"></ol>
-      <div class="chips" id="chips">
-        <button type="button">My name is Alex</button><button type="button">I live in Madison</button><button type="button">What's the weather?</button><button type="button">And tomorrow?</button><button type="button">Remember that the demo is Friday</button><button type="button">What do you know about me?</button>
+      <div class="chips" id="chips" aria-label="Suggestions">
+        <button type="button">My name is Alex</button><button type="button">I live in Madison</button><button type="button">What's the weather?</button><button type="button">And tomorrow?</button><button type="button">Translate "Good morning" to French</button><button type="button">What is 12 x 7</button><button type="button">Remember that the demo is Friday</button><button type="button">What do you know about me?</button>
       </div>
-      <form class="bar2" id="bar"><input id="q" autocomplete="off" placeholder="Ask Nova anything…" aria-label="Message"><button class="send" aria-label="Send"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 12l16-8-6 16-2.5-6.5z" fill="currentColor"/></svg></button></form>
+      <div class="dock">
+        <form class="type" id="bar"><input id="q" autocomplete="off" placeholder="Ask Nova anything" aria-label="Message"><button class="send" aria-label="Send"><svg class="i"><use href="#i-send"/></svg></button></form>
+        <div class="ctrl">
+          <button type="button" class="c-sm" data-stop aria-label="Stop speaking"><svg class="i"><use href="#i-pause"/></svg></button>
+          <button type="button" class="mic" data-mic aria-label="Talk to Nova"><svg class="i"><use href="#i-micfill"/></svg></button>
+          <button type="button" class="c-sm" data-go="home" aria-label="Close chat"><svg class="i"><use href="#i-close"/></svg></button>
+        </div>
+      </div>
     </div>
 
-    <!-- VOICE -->
-    <div class="screen voice" id="voice" hidden>
-      <div class="bar"><button type="button" class="ico back" data-go="home" aria-label="Back">‹</button><span class="brand small">Talk to Nova <em>AI</em><sup>✦</sup></span><span class="ico" aria-hidden="true">ⓘ</span></div>
-      <p class="listen" id="state">Tap the mic. How can I assist?</p>
+    <!-- VOICE: boards 03, 09 -->
+    <div class="screen" id="voice" hidden>
+      <header class="bar">
+        <button type="button" class="ico" data-menu aria-label="Menu"><svg class="i"><use href="#i-menu"/></svg></button>
+        <span class="ttl">Talk to Nova <span class="ai">AI<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M6 3.2c0 3.1 1.7 4.8 4.8 4.8C7.7 8 6 9.7 6 12.8 6 9.7 4.3 8 1.2 8 4.3 8 6 6.3 6 3.2z" fill="url(#gAI)"/><path d="M11.2.6c0 1.3.7 2 2 2-1.3 0-2 .7-2 2 0-1.3-.7-2-2-2 1.3 0 2-.7 2-2z" fill="#4F8CFF"/><circle cx="2.3" cy="2.6" r=".7" fill="#00C7BE"/></svg></span></span>
+        <button type="button" class="ico" id="infoBtn" aria-label="About voice" aria-expanded="false"><svg class="i"><use href="#i-info"/></svg></button>
+      </header>
+      <p class="listen"><span id="state">Tap the mic. How can I assist?</span></p>
+      <div class="pop" id="info" hidden>
+        <b>How voice works here</b>
+        <p>Speech in and out use your browser's own speech engine. Voice input works in Chrome, Edge and Safari. Anywhere else, Smart Chat gives you everything voice does by typing.</p>
+      </div>
       <canvas id="orb" aria-hidden="true"></canvas>
       <p class="said" id="said">Ask about the weather, translate a phrase, or tell me your name.</p>
-      <div class="ctrl"><button type="button" class="c-sm" id="pause" aria-label="Stop speaking">❚❚</button><button type="button" class="mic" id="mic" aria-label="Talk to Nova"><svg viewBox="0 0 24 24" width="26" height="26"><path fill="currentColor" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12h-2Z"/></svg></button><button type="button" class="c-sm" data-go="home" aria-label="Close">✕</button></div>
+      <button type="button" class="howlink" id="voiceHow" hidden>How Nova got this <svg class="i"><use href="#i-chev"/></svg></button>
+      <div class="ctrl">
+        <button type="button" class="c-sm" data-stop aria-label="Stop speaking"><svg class="i"><use href="#i-pause"/></svg></button>
+        <button type="button" class="mic" data-mic aria-label="Talk to Nova"><svg class="i"><use href="#i-micfill"/></svg></button>
+        <button type="button" class="c-sm" data-go="home" aria-label="Close"><svg class="i"><use href="#i-close"/></svg></button>
+      </div>
     </div>
+
+    <!-- HISTORY: board 10, left phone -->
+    <div class="screen" id="history" hidden>
+      <header class="bar">
+        <button type="button" class="ico" data-go="home" aria-label="Close history"><svg class="i"><use href="#i-close"/></svg></button>
+        <span class="ttl">Talk to Nova <span class="ai">AI<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M6 3.2c0 3.1 1.7 4.8 4.8 4.8C7.7 8 6 9.7 6 12.8 6 9.7 4.3 8 1.2 8 4.3 8 6 6.3 6 3.2z" fill="url(#gAI)"/><path d="M11.2.6c0 1.3.7 2 2 2-1.3 0-2 .7-2 2 0-1.3-.7-2-2-2 1.3 0 2-.7 2-2z" fill="#4F8CFF"/><circle cx="2.3" cy="2.6" r=".7" fill="#00C7BE"/></svg></span></span>
+        <button type="button" class="ico" data-go="settings" aria-label="Settings and memory"><svg class="i"><use href="#i-dots"/></svg></button>
+      </header>
+      <button type="button" class="newtalk" id="newTalk"><svg class="i"><use href="#i-plus"/></svg>New Talk</button>
+      <div class="talks" id="talks"></div>
+    </div>
+
+    <!-- SETTINGS: board 10, Smart Settings -->
+    <div class="screen" id="settings" hidden>
+      <header class="bar">
+        <button type="button" class="ico" data-menu aria-label="Menu"><svg class="i"><use href="#i-menu"/></svg></button>
+        <span class="ttl">Settings</span>
+        <button type="button" class="avatar" data-go="home" data-avatar aria-label="Home">N</button>
+      </header>
+      <div class="setscroll">
+        <h2 class="grp">Memory</h2>
+        <ul class="panel" id="setMem"></ul>
+        <p class="foot">Only what you tell Nova, kept in this browser. Nothing is inferred and nothing is sent to a server.</p>
+
+        <h2 class="grp">Speech</h2>
+        <ul class="panel">
+          <li><svg class="g"><use href="#s-speaker"/></svg><label for="speak">Speak replies</label><span class="switch"><input type="checkbox" id="speak" checked><i></i></span></li>
+          <li><svg class="g"><use href="#s-wave"/></svg><label for="lang">Common language</label><span class="sel"><select id="lang" aria-label="Voice language"><option value="en-US">English (US)</option><option value="en-GB">English (UK)</option><option value="en-IN">English (India)</option><option value="en-AU">English (Australia)</option></select><svg class="i"><use href="#i-updown"/></svg></span></li>
+        </ul>
+        <p class="foot">Voice uses your browser's speech engine. Nova understands English, so pick the accent it should listen for.</p>
+
+        <h2 class="grp">History</h2>
+        <ul class="panel">
+          <li><button type="button" class="rowbtn" id="clearHist"><svg class="g red"><use href="#s-trash"/></svg><span>Delete all history</span></button></li>
+          <li><button type="button" class="rowbtn" id="forget"><svg class="g red"><use href="#s-trash"/></svg><span>Forget all</span></button></li>
+        </ul>
+        <p class="foot">Forget all clears memory and history together. Deletion cannot be undone.</p>
+
+        <h2 class="grp">About</h2>
+        <ul class="panel">
+          <li><svg class="g"><use href="#s-route"/></svg><span>Understanding</span><em>Rules, in your browser</em></li>
+          <li><svg class="g"><use href="#s-cloud"/></svg><span>Weather</span><em>Open-Meteo, live</em></li>
+          <li><svg class="g"><use href="#s-globe"/></svg><span>Translation</span><em>MyMemory, live</em></li>
+          <li><a class="rowbtn" href="https://github.com/murtuzabuilds/nova"><svg class="g"><use href="#s-code"/></svg><span>Code on GitHub</span><svg class="i dim"><use href="#i-arrow"/></svg></a></li>
+          <li><button type="button" class="rowbtn" data-go="splash"><svg class="g"><use href="#s-star"/></svg><span>Welcome screen</span><svg class="i dim"><use href="#i-chev"/></svg></button></li>
+        </ul>
+        <p class="foot">Designed and built by <a href="https://murtuzabuilds.com">Murtuza</a>.</p>
+      </div>
+    </div>
+
+    <!-- navigation, as mapped on the Navigation Framework board -->
+    <div class="scrim" id="scrim" hidden></div>
+    <nav class="menu" id="menu" hidden aria-label="Navigation">
+      <button type="button" data-go="home"><svg class="i"><use href="#i-home"/></svg>Home</button>
+      <button type="button" data-go="history"><svg class="i"><use href="#i-chat"/></svg>Conversations</button>
+      <button type="button" data-go="voice"><svg class="i"><use href="#i-mic"/></svg>Voice Assistant</button>
+      <button type="button" data-go="settings"><svg class="i"><use href="#i-gear"/></svg>Settings</button>
+    </nav>
+    <div class="toast" id="toast" role="status" hidden></div>
     <div class="homebar" aria-hidden="true"></div>
+    </div>
   </section>
 
+  <!-- desktop: a larger view of the same trace and memory, in the case study's page language -->
   <aside class="side" id="side">
-    <div class="sideh"><span class="brand"><span class="logo" aria-hidden="true"></span>Nova <em>AI</em><sup>✦</sup></span><label class="toggle"><input type="checkbox" id="speak" checked> Speak replies</label></div>
-    <p class="lede">A voice assistant that remembers what you tell it, fills in what you don't say, and shows every decision it makes.</p>
-    <h2>Trace</h2>
-    <ol class="trace" id="trace"><li class="empty">Every step appears here: what Nova understood, what it pulled from memory or the last turn, and which tool it called.</li></ol>
-    <h2>Memory <button type="button" class="forget" id="forget">Forget all</button></h2>
-    <ul class="mem" id="mem"></ul>
-    <p class="fine">Memory stays in this browser. Weather from Open-Meteo, translation from MyMemory, voice from your browser's speech engine. <a href="https://github.com/murtuzabuilds/nova">Code on GitHub</a>. Designed and built by <a href="https://murtuzabuilds.com">Murtuza</a>.</p>
+    <img class="lockup" src="assets/logo.svg" alt="Nova AI" width="125" height="36">
+    <p class="kicker">Memory, Context and Tools, Made Visible</p>
+    <h2 class="head">Talk with Nova AI</h2>
+    <p class="lede">Nova remembers what you tell it, fills in what you leave unsaid from the last turn and shows every decision it makes. Tell it where you live, ask for the weather, then say "And tomorrow?".</p>
+    <div class="cards">
+      <section class="card">
+        <p class="kicker">How Nova Got This</p>
+        <h3>Decision trace</h3>
+        <ol class="trace" id="trace"><li class="empty">Every step of the last reply appears here: what Nova understood, what it filled in from memory or the last turn, and which tool it called.</li></ol>
+      </section>
+      <section class="card">
+        <p class="kicker">Stays In This Browser</p>
+        <h3>Memory <button type="button" class="forget" id="forgetSide">Forget all</button></h3>
+        <ul class="mem" id="mem"></ul>
+      </section>
+    </div>
+    <p class="fine">Understanding is rule based and runs in your browser. Weather from Open-Meteo, translation from MyMemory, voice from your browser's speech engine. <a href="https://github.com/murtuzabuilds/nova">Code on GitHub</a>. Designed and built by <a href="https://murtuzabuilds.com">Murtuza</a>.</p>
   </aside>
 </main>
 <script type="module" src="app.js"></script>

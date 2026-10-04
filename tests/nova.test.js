@@ -71,3 +71,11 @@ test('translate is a tool call with language detection', async () => {
   assert.equal(r.say, 'In Spanish: Hola, ¿cómo estás?');
   assert.ok(r.trace.some(s => /translate\(text=Hello, how are you\?, lang=spanish\)/.test(s.detail)));
 });
+
+test('a tool call also returns its structured result, so the UI can draw a card', async () => {
+  const nova = make();
+  await nova.ask('I live in Madison');
+  const r = await nova.ask("what's the weather?");
+  assert.deepEqual(r.data, { city: 'Madison', hi: 71, lo: 52, sky: 'partly cloudy', units: 'fahrenheit' });
+  assert.equal((await nova.ask('hey')).data, null);
+});
