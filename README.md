@@ -59,6 +59,17 @@ tests/        9 end-to-end conversations, run with node's built-in test runner
 
 The router is rule-based so the demo is instant, free and deterministic. It sits behind one function, `route(text, { memory, context })`, so replacing it with an LLM that returns the same `{ kind, tool, args }` shape doesn't touch the rest of the app.
 
+## More screens
+
+| | |
+|---|---|
+| ![Smart Chat with the decision trace](docs/chat.webp) | ![Settings and memory](docs/settings.webp) |
+| Smart Chat with the decision trace | Settings and memory |
+
+<img src="docs/phone.webp" width="300" alt="Welcome screen on a phone">
+
+Welcome screen on a phone.
+
 ## Run it
 
 ```bash
