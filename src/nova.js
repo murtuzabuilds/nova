@@ -11,17 +11,21 @@ export class Nova {
   async ask(text) {
     const trace = [];
     const r = route(text, { memory: this.memory, context: this.context });
+    const wasPending = this.context.pending; this.context.pending = null;   // a question Nova asked lasts one turn
     trace.push({ step: 'understand', detail: r.kind === 'tool' ? `intent: ${r.tool}` : `intent: ${r.kind}` });
     this.context.push('user', text);
     let say, data = null;
     const name = this.memory.recall('name');
 
     switch (r.kind) {
-      case 'remember':
-        this.memory.remember(r.slot, r.value);
-        trace.push({ step: 'memory', detail: `saved ${r.slot} = ${r.value}` });
-        say = r.slot === 'name' ? `Nice to meet you, ${r.value}. I'll remember that.` : `Got it, I'll remember your ${r.slot} is ${r.value}.`;
+      case 'remember': {
+        const facts = r.facts || [{ slot: r.slot, value: r.value }];
+        for (const f of facts) { this.memory.remember(f.slot, f.value); trace.push({ step: 'memory', detail: `saved ${f.slot} = ${f.value}` }); }
+        const nm = facts.find(f => f.slot === 'name'), rest = facts.filter(f => f.slot !== 'name');
+        const others = rest.map(f => f.slot === 'city' ? `you live in ${f.value}` : f.slot === 'units' ? `you prefer ${f.value}` : `your ${f.slot} is ${f.value}`).join(' and ');
+        say = nm ? `Nice to meet you, ${nm.value}. ${others ? `I'll remember that, and that ${others}.` : "I'll remember that."}` : `Got it, I'll remember ${others}.`;
         break;
+      }
       case 'forget': {
         const k = this.memory.forget(r.slot);
         trace.push({ step: 'memory', detail: `forgot ${r.slot} (${k})` });
@@ -43,15 +47,20 @@ export class Nova {
         try {
           const out = await this.tools[r.tool](r.args);
           say = out.say; data = out.data ?? null;
-          this.context.set(r.tool, r.args);
+          if (r.tool === 'weather' && !out.data) this.context.fail(r.tool, r.args, 'notfound');
+          else this.context.set(r.tool, r.args);
           trace.push({ step: 'result', detail: out.data ? JSON.stringify(out.data).slice(0, 120) : 'no data' });
         } catch (e) {
           say = "That tool didn't answer. Check your connection and try again.";
+          this.context.fail(r.tool, r.args, 'error');
           trace.push({ step: 'error', detail: String(e.message || e) });
         }
         break;
       }
-      case 'ask': say = r.say; break;
+      case 'ask':
+        say = r.say;
+        if (r.tool) this.context.pending = { tool: r.tool, day: r.day || wasPending?.day || 'today' };
+        break;
       case 'greet': say = name ? `Hey ${name}, what can I do?` : 'Hi, I am Nova. Ask about the weather, set a timer, or tell me your name.'; break;
       default: say = "I can check the weather, tell the time, do math, set timers and remember things. Try: \"what's the weather tomorrow?\"";
     }

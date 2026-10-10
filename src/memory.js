@@ -28,7 +28,9 @@ export class Memory {
 
 // Short-term context: what the conversation is about right now, so follow-ups work.
 export class Context {
-  constructor() { this.last = {}; this.turns = []; }
-  set(tool, args) { this.last = { tool, args, at: Date.now() }; }
+  constructor() { this.last = {}; this.turns = []; this.pending = null; this.failed = null; }
+  set(tool, args) { this.last = { tool, args, at: Date.now() }; this.pending = null; this.failed = null; }
+  // a tool call that did not work: remembered so a follow-up like "and tomorrow?" can say what is missing
+  fail(tool, args, reason) { this.last = {}; this.failed = { tool, args, reason, at: Date.now() }; }
   push(role, text) { this.turns.push({ role, text }); if (this.turns.length > 12) this.turns.shift(); }
 }

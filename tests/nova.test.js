@@ -79,3 +79,78 @@ test('a tool call also returns its structured result, so the UI can draw a card'
   assert.deepEqual(r.data, { city: 'Madison', hi: 71, lo: 52, sky: 'partly cloudy', units: 'fahrenheit' });
   assert.equal((await nova.ask('hey')).data, null);
 });
+
+test('remembers several facts said in one sentence', async () => {
+  const nova = make();
+  const a = await nova.ask('My name is Sam and I live in Madison');
+  assert.equal(a.say, "Nice to meet you, Sam. I'll remember that, and that you live in Madison.");
+  assert.equal(a.trace.filter(s => s.step === 'memory').length, 2);
+  assert.equal((await nova.ask("what's my name?")).say, "You're Sam.");
+  assert.match((await nova.ask("what's the weather?")).say, /Today in Madison/);
+});
+
+test('"I am X from Y" and "I\'m X from Y" give a name and a city', async () => {
+  for (const line of ['I am Sam from Chicago', "I'm Sam from Chicago", 'I’m Sam, from Chicago.']) {
+    const nova = make();
+    assert.match((await nova.ask(line)).say, /Sam.*Chicago/);
+    assert.equal(nova.memory.recall('name'), 'Sam');
+    assert.equal(nova.memory.recall('city'), 'Chicago');
+  }
+  const nova = make();
+  await nova.ask("I'm from Boston");
+  assert.equal(nova.memory.recall('city'), 'Boston');
+  assert.equal(nova.memory.recall('name'), null);
+});
+
+test('keeps the facts it understood and ignores the rest', async () => {
+  const nova = make();
+  await nova.ask('I am Sam and I like pizza');
+  assert.equal(nova.memory.recall('name'), 'Sam');
+  await nova.ask('my name is Ana Lopez and I prefer celsius');
+  assert.equal(nova.memory.recall('name'), 'Ana Lopez');
+  assert.equal(nova.memory.recall('units'), 'celsius');
+});
+
+test('does not mistake feelings or plans for a name', () => {
+  const ctx = { memory: new Memory(), context: new Context() };
+  for (const line of ["I'm tired", 'I am in a meeting', "I'm going to the store"]) assert.notEqual(route(line, ctx).kind, 'remember', line);
+});
+
+test('a follow-up after a weather question with no city asks for one, then accepts a bare city', async () => {
+  const nova = make();
+  assert.match((await nova.ask("what's the weather?")).say, /Which city/);
+  const b = await nova.ask('And tomorrow?');
+  assert.match(b.say, /need a city for tomorrow's forecast/);
+  assert.equal(b.route.kind, 'ask');
+  const c = await nova.ask('Chicago');
+  assert.match(c.say, /Tomorrow in Chicago: light rain/);
+});
+
+test('a follow-up after a city that was not found says so instead of repeating the miss', async () => {
+  const memory = new Memory(mapStore());
+  const noPlace = async url => ({ json: async () => (url.includes('geocoding') ? { results: [] } : {}) });
+  const nova = new Nova({ memory, context: new Context(), fetchImpl: noPlace });
+  assert.match((await nova.ask('weather in Atlantis')).say, /couldn't find Atlantis/);
+  const b = await nova.ask('And tomorrow?');
+  assert.match(b.say, /couldn't find Atlantis earlier.*Which city/);
+});
+
+test('a follow-up after a network error retries the same city', async () => {
+  let down = true;
+  const flaky = async url => { if (down) throw new Error('offline'); return fakeFetch(url); };
+  const nova = new Nova({ memory: new Memory(mapStore()), context: new Context(), fetchImpl: flaky });
+  assert.match((await nova.ask('weather in Chicago')).say, /didn't answer/);
+  down = false;
+  assert.match((await nova.ask('And tomorrow?')).say, /Tomorrow in Chicago/);
+});
+
+test('a follow-up with nothing before it gets a helpful nudge, not the generic fallback', async () => {
+  const r = await make().ask('And tomorrow?');
+  assert.equal(r.route.kind, 'ask');
+  assert.match(r.say, /weather in Madison tomorrow/);
+});
+
+test('"weather in Chicago and tomorrow" keeps the city clean', () => {
+  const r = route('weather in Chicago and tomorrow', { memory: new Memory(), context: new Context() });
+  assert.deepEqual(r.args, { city: 'Chicago', day: 'tomorrow' });
+});
