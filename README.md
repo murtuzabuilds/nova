@@ -2,7 +2,7 @@
 
 **A context-aware voice assistant with memory and tool calling.** It runs entirely in your browser: no server, no account, nothing leaves your device except the weather lookup.
 
-**[Try it live →](https://murtuzabuilds.github.io/nova/)** &nbsp;·&nbsp; [Case study](https://murtuzabuilds.com/#portfolio)
+**[Try it live →](https://murtuzabuilds.com/nova/)** &nbsp;·&nbsp; [Case study](https://murtuzabuilds.com/#portfolio)
 
 Nova started as a UX case study about one question: *what makes a voice assistant feel like it actually knows you?* This repo is the working answer. It's small on purpose, so every decision is visible.
 
